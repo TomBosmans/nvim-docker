@@ -18,7 +18,7 @@ RUN pacman -Syu --noconfirm &&\
 RUN useradd\
   --create-home\
   --user-group\
-  --shell /bin/zsh\
+  --shell $SHELL\
   $USER_NAME
 
 USER $USER_NAME
@@ -42,4 +42,5 @@ RUN nvim --headless\
   -c "autocmd User PackerComplete quitall"\
   -c "lua require('packer').sync()"
 
-ENTRYPOINT nvim
+ADD entrypoint.sh /usr/local/bin/
+ENTRYPOINT ["sh", "/usr/local/bin/entrypoint.sh"]
