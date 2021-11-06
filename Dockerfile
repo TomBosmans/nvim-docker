@@ -4,8 +4,7 @@ ENV SHELL=/bin/zsh
 
 ARG USER_NAME=neovim
 
-RUN pacman -Syu --noconfirm &&\
-    pacman --noconfirm -S\
+RUN pacman --noconfirm -Syu\
       sudo\
       neovim\
       zsh\
@@ -13,7 +12,7 @@ RUN pacman -Syu --noconfirm &&\
       exa\
       git\
       fzf\
-      xclip
+      make
 
 RUN useradd\
   --create-home\
@@ -26,13 +25,13 @@ WORKDIR /home/$USER_NAME/Workspace
 
 RUN mkdir ~/.config
 
-RUN git clone https://github.com/TomBosmans/nvim.git ~/tmp_nvim &&\
-    git clone https://github.com/TomBosmans/zsh.git ~/tmp_zsh &&\
-    cp -r ~/tmp_zsh/zsh ~/.zsh &&\
-    cp -r ~/tmp_zsh/zshrc ~/.zshrc &&\
-    cp -r ~/tmp_nvim ~/.config/nvim/ &&\
-    rm -rf ~/tmp_nvim &&\
-    rm -rf ~/tmp_zsh
+RUN git clone https://github.com/TomBosmans/nvim.git ~/.config/nvim &&\
+    git clone https://github.com/TomBosmans/zsh.git ~/.config/zsh
+RUN cd ~/.config/zsh &&\
+    git submodule init &&\
+    git submodule update &&\
+    cd -
+RUN make --directory ~/.config/zsh link
 
 RUN rm -rf ~/.bash_logout &&\
     rm -rf ~/.bashrc &&\
