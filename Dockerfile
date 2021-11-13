@@ -5,6 +5,8 @@ ENV SHELL=/bin/zsh
 
 # The name for our user.
 ARG USER_NAME=neovim
+# set the bin folder location
+ARG BIN_FOLDER=/usr/local/bin
 
 # Install our arch packages.
 RUN pacman --noconfirm -Syu\
@@ -15,11 +17,12 @@ RUN pacman --noconfirm -Syu\
       exa\
       git\
       fzf\
-      make
+      make\
+      gcc
 
 # Install lsp
-ADD lsp/ /usr/local/bin/
-RUN make --directory /usr/local/bin/lua install
+ADD lsp/ $BIN_FOLDER
+RUN make --directory $BIN_FOLDER/typescript install
 
 # Create our user with its home dir, group and shell.
 RUN useradd\
@@ -59,5 +62,5 @@ RUN nvim --headless\
   -c "lua require('packer').sync()"
 
 # Set the shell script as our Entrypoint, makes nvim work as we want.
-ADD entrypoint.sh /usr/local/bin/
+ADD entrypoint.sh $BIN_FOLDER
 ENTRYPOINT ["sh", "/usr/local/bin/entrypoint.sh"]
