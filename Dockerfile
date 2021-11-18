@@ -35,8 +35,8 @@ RUN useradd\
 USER $USER_NAME
 WORKDIR /home/$USER_NAME/Workspace
 
-# Create the .config folder.
-RUN mkdir ~/.config
+# Create the .config folder as a volume.
+VOLUME ~/.config
 
 # Clone the git repos
 RUN git clone https://github.com/TomBosmans/nvim.git ~/.config/nvim &&\
